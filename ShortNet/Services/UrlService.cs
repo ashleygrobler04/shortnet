@@ -28,7 +28,7 @@ public class UrlService : IUrlService
     public bool IsValid(string Url)
     {
         bool success = true;
-        if (!Url.StartsWith("https://") || !Url.StartsWith("http://"))
+        if (!Url.StartsWith("https://") && !Url.StartsWith("http://"))
         {
             success = false;
         }
