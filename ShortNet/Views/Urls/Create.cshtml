@@ -1,0 +1,24 @@
+﻿@model ShortNet.Models.Url
+
+@{
+    ViewData["Title"] = "Create";
+}
+
+<h1>Create your shortened URL</h1>
+
+<p>Fill in the form below and your shortened url is created!</p>
+
+<form asp-action="Create" method="post">
+
+    <input asp-for="Name" placeholder="URL name" />
+    <br />
+
+    <input asp-for="LongUrl" placeholder="Original URL" />
+    <br />
+
+    <input asp-for="ShortUrl" placeholder="Shortened URL" />
+    <br />
+
+    <input type="submit" value="Create" />
+
+</form>
