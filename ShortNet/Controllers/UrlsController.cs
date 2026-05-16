@@ -55,4 +55,61 @@ public class UrlsController : Controller
         }
         return Redirect(foundUrl.LongUrl);
     }
+
+    [Authorize]
+    [HttpGet]
+    public ActionResult Edit(int id)
+    {
+        var url = _context.Urls.Find(id);
+        if (url == null)
+        {
+            return View("NotFound");
+        }
+        if (url.CreatedBy != User.Identity.Name)
+        {
+            return View("NotFound");
+        }
+        return View(url);
+    }
+
+    [Authorize]
+    [HttpPost]
+    public ActionResult Edit(int id, Url url)
+    {
+        if (id != url.Id)
+        {
+            return View("NotFound");
+        }
+
+        var existingUrl = _context.Urls.Find(id);
+        if (existingUrl == null)
+        {
+            return View("NotFound");
+        }
+
+        if (existingUrl.CreatedBy != User.Identity.Name)
+        {
+            return View("NotFound");
+        }
+
+        if (ModelState.IsValid)
+        {
+            try
+            {
+                existingUrl.Name = url.Name;
+                existingUrl.LongUrl = url.LongUrl;
+                existingUrl.ShortUrl = url.ShortUrl;
+                
+                _context.Urls.Update(existingUrl);
+                _context.SaveChanges();
+                return RedirectToAction("List");
+            }
+            catch (Exception ex)
+            {
+                ModelState.AddModelError("", "An error occurred while saving: " + ex.Message);
+            }
+        }
+
+        return View(url);
+    }
 }

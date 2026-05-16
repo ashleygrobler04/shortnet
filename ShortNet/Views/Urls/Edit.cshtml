@@ -1,0 +1,46 @@
+﻿@model ShortNet.Models.Url
+@{
+    ViewData["Title"] = "Edit URL";
+}
+<h1>Edit (@Model.Name)</h1>
+<p>Update your url properties on this page. You can only update the url if it belongs to you.</p>
+<div class="row">
+    <div class="col-md-6">
+        <form asp-action="Edit" method="post">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="Id" />
+            
+            <!-- Editable Fields -->
+            <div class="form-group">
+                <label asp-for="Name" class="control-label"></label>
+                <input asp-for="Name" class="form-control" />
+                <span asp-validation-for="Name" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="LongUrl" class="control-label"></label>
+                <input asp-for="LongUrl" class="form-control" />
+                <span asp-validation-for="LongUrl" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ShortUrl" class="control-label"></label>
+                <input asp-for="ShortUrl" class="form-control" />
+                <span asp-validation-for="ShortUrl" class="text-danger"></span>
+            </div>
+            
+            <!-- Read-Only Fields -->
+            <div class="form-group">
+                <label class="control-label">Created At</label>
+                <input type="text" class="form-control" value="@Model.CreatedAt.ToString("g")" disabled />
+            </div>
+            <div class="form-group">
+                <label class="control-label">Created By</label>
+                <input type="text" class="form-control" value="@Model.CreatedBy" disabled />
+            </div>
+            
+            <div class="form-group mt-3">
+                <input type="submit" value="Save" class="btn btn-primary" />
+                <a asp-action="List" class="btn btn-secondary">Cancel</a>
+            </div>
+        </form>
+    </div>
+</div>

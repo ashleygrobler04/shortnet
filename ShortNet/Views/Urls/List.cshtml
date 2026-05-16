@@ -1,21 +1,25 @@
 ﻿@{
     ViewData["Title"] = "Your urls";
-    var urls = (List<Url>)ViewData["UserUrls"];
+    var urls = ViewData["UserUrls"] as List<Url>;
 }
 <h1>Your created urls</h1>
-@if (urls?.Count == 0)
+@if (urls == null || urls.Count == 0)
 {
     <p>You did not create any urls as of yet.</p>
 }
-@foreach (var userUrl in urls)
+else
 {
-    <h3>@userUrl.Name</h3>
-    <ul>
-        <li>
-            Long url: @userUrl.LongUrl
-        </li>
-        <li>
-            Shortened to: @userUrl.ShortUrl
-        </li>
-    </ul>
+    @foreach (var userUrl in urls)
+    {
+        <h3>@userUrl.Name</h3>
+        <ul>
+            <li>
+                Long url: @userUrl.LongUrl
+            </li>
+            <li>
+                Shortened to: @userUrl.ShortUrl
+            </li>
+        </ul>
+        <a href="/Urls/Edit/@userUrl.Id">Edit</a>
+    }
 }
