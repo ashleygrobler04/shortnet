@@ -1,0 +1,79 @@
+@{
+    var userRoles = (List<(Microsoft.AspNetCore.Identity.IdentityUser User, List<string> Roles)>?)ViewData["UserRoles"] ?? new List<(Microsoft.AspNetCore.Identity.IdentityUser, List<string>)>();
+    ViewData["Title"] = "User Management";
+}
+
+<div class="container mt-5">
+    <div class="row mb-4">
+        <div class="col-md-6">
+            <h1>User Management</h1>
+        </div>
+        <div class="col-md-6 text-end">
+            <a href="@Url.Action("Index", "Home")" class="btn btn-secondary">Back to Home</a>
+        </div>
+    </div>
+
+    @if (TempData["SuccessMessage"] != null)
+    {
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            @TempData["SuccessMessage"]
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    }
+
+    @if (TempData["ErrorMessage"] != null)
+    {
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            @TempData["ErrorMessage"]
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    }
+
+    @if (userRoles == null || userRoles.Count == 0)
+    {
+        <div class="alert alert-info">
+            No users found.
+        </div>
+    }
+    else
+    {
+        <div class="table-responsive">
+            <table class="table table-striped table-hover">
+                <thead class="table-dark">
+                    <tr>
+                        <th>Email</th>
+                        <th>Username</th>
+                        <th>Roles</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var userRole in userRoles)
+                    {
+                        <tr>
+                            <td>@userRole.User.Email</td>
+                            <td>@userRole.User.UserName</td>
+                            <td>
+                                @if (userRole.Roles.Count == 0)
+                                {
+                                    <span class="badge bg-secondary">No Roles</span>
+                                }
+                                else
+                                {
+                                    @foreach (var role in userRole.Roles)
+                                    {
+                                        <span class="badge bg-primary">@role</span>
+                                    }
+                                }
+                            </td>
+                            <td>
+                                <a href="@Url.Action("EditUser", new { id = userRole.User.Id })" class="btn btn-sm btn-warning">Edit</a>
+                                <a href="@Url.Action("DeleteUserConfirm", new { id = userRole.User.Id })" class="btn btn-sm btn-danger">Delete</a>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    }
+</div>

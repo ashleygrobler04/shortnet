@@ -1,0 +1,71 @@
+@model ShortNet.Models.Url
+
+@{
+    ViewData["Title"] = "Edit URL";
+}
+
+<div class="container mt-5">
+    <div class="row">
+        <div class="col-md-8 offset-md-2">
+            <h1>Edit URL</h1>
+            <hr />
+
+            <form method="post">
+                <input type="hidden" asp-for="Id" />
+                <input type="hidden" asp-for="CreatedBy" />
+                <input type="hidden" asp-for="CreatedAt" />
+
+                <div class="form-group mb-3">
+                    <label asp-for="Name" class="form-label">Name</label>
+                    <input asp-for="Name" class="form-control" />
+                    <span asp-validation-for="Name" class="text-danger"></span>
+                </div>
+
+                <div class="form-group mb-3">
+                    <label asp-for="LongUrl" class="form-label">Long URL</label>
+                    <input asp-for="LongUrl" class="form-control" />
+                    <span asp-validation-for="LongUrl" class="text-danger"></span>
+                    <small class="form-text text-muted">Must be a valid HTTP or HTTPS URL</small>
+                </div>
+
+                <div class="form-group mb-3">
+                    <label asp-for="ShortUrl" class="form-label">Short URL</label>
+                    <input asp-for="ShortUrl" class="form-control" />
+                    <span asp-validation-for="ShortUrl" class="text-danger"></span>
+                </div>
+
+                <div class="form-group mb-3">
+                    <label class="form-label"><strong>Created By:</strong></label>
+                    <input type="text" class="form-control" value="@Model.CreatedBy" disabled />
+                </div>
+
+                <div class="form-group mb-3">
+                    <label class="form-label"><strong>Created At:</strong></label>
+                    <input type="text" class="form-control" value="@Model.CreatedAt.ToString("MMM dd, yyyy HH:mm")" disabled />
+                </div>
+
+                @if (ViewData.ModelState.Values.Any(v => v.Errors.Count > 0))
+                {
+                    <div class="alert alert-danger">
+                        <strong>Error!</strong>
+                        @foreach (var error in ViewData.ModelState.Values.SelectMany(v => v.Errors))
+                        {
+                            <p>@error.ErrorMessage</p>
+                        }
+                    </div>
+                }
+
+                <div class="mt-4">
+                    <button type="submit" class="btn btn-primary">Save Changes</button>
+                    <a href="@Url.Action("Urls")" class="btn btn-secondary">Cancel</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

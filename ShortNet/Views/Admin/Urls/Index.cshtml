@@ -1,0 +1,77 @@
+@{
+    var allUrls = (List<ShortNet.Models.Url>?)ViewData["AllUrls"] ?? new List<ShortNet.Models.Url>();
+    ViewData["Title"] = "URL Management";
+}
+
+<div class="container mt-5">
+    <div class="row mb-4">
+        <div class="col-md-6">
+            <h1>URL Management</h1>
+        </div>
+        <div class="col-md-6 text-end">
+            <a href="@Url.Action("Index", "Home")" class="btn btn-secondary">Back to Home</a>
+        </div>
+    </div>
+
+    @if (TempData["SuccessMessage"] != null)
+    {
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            @TempData["SuccessMessage"]
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    }
+
+    @if (TempData["ErrorMessage"] != null)
+    {
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            @TempData["ErrorMessage"]
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    }
+
+    @if (allUrls == null || allUrls.Count == 0)
+    {
+        <div class="alert alert-info">
+            No URLs found.
+        </div>
+    }
+    else
+    {
+        <div class="table-responsive">
+            <table class="table table-striped table-hover">
+                <thead class="table-dark">
+                    <tr>
+                        <th>Name</th>
+                        <th>Short URL</th>
+                        <th>Long URL</th>
+                        <th>Created By</th>
+                        <th>Created At</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var url in allUrls)
+                    {
+                        <tr>
+                            <td>@url.Name</td>
+                            <td>
+                                <code>@url.ShortUrl</code>
+                            </td>
+                            <td>
+                                <a href="@url.LongUrl" target="_blank" title="@url.LongUrl">
+                                    @(url.LongUrl.Length > 50 ? url.LongUrl.Substring(0, 47) + "..." : url.LongUrl)
+                                </a>
+                            </td>
+                            <td>@url.CreatedBy</td>
+                            <td>@url.CreatedAt.ToString("MMM dd, yyyy HH:mm")</td>
+                            <td>
+                                <a href="@Url.Action("EditUrl", new { id = url.Id })" class="btn btn-sm btn-warning">Edit</a>
+                                <a href="@Url.Action("DeleteUrlConfirm", new { id = url.Id })" class="btn btn-sm btn-danger">Delete</a>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    }
+</div>

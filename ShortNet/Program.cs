@@ -13,11 +13,21 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
 builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
+    .AddRoles<IdentityRole>()
     .AddEntityFrameworkStores<ApplicationDbContext>();
+    
 builder.Services.AddScoped<IUrlService, UrlService>();
+builder.Services.AddScoped<IRoleInitializerService, RoleInitializerService>();
 builder.Services.AddControllersWithViews();
 
 var app = builder.Build();
+
+// Initialize roles
+using (var scope = app.Services.CreateScope())
+{
+    var roleInitializer = scope.ServiceProvider.GetRequiredService<IRoleInitializerService>();
+    await roleInitializer.InitializeRolesAsync();
+}
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
