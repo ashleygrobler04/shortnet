@@ -9,16 +9,28 @@
 <p>Fill in the form below and your shortened url is created!</p>
 
 <form asp-action="Create" method="post">
+    <div asp-validation-summary="All" class="validation-summary-errors text-danger" role="alert"></div>
 
-    <input asp-for="Name" placeholder="URL name" />
-    <br />
+    <div class="form-group">
+        <label asp-for="Name"></label>
+        <input asp-for="Name" class="form-control" placeholder="URL name" aria-describedby="NameHelp" />
+        <span asp-validation-for="Name" class="text-danger"></span>
+        <small id="NameHelp" class="form-text text-muted">Give your URL a name that helps you identify it later.</small>
+    </div>
 
-    <input asp-for="LongUrl" placeholder="Original URL" />
-    <br />
+    <div class="form-group">
+        <label asp-for="LongUrl"></label>
+        <input asp-for="LongUrl" class="form-control" placeholder="Original URL" aria-describedby="LongUrlHelp" />
+        <span asp-validation-for="LongUrl" class="text-danger"></span>
+        <small id="LongUrlHelp" class="form-text text-muted">Enter the destination URL, including https:// or http://.</small>
+    </div>
 
-    <input asp-for="ShortUrl" placeholder="Shortened URL" />
-    <br />
+    <div class="form-group">
+        <label asp-for="ShortUrl"></label>
+        <input asp-for="ShortUrl" class="form-control" placeholder="Shortened URL" aria-describedby="ShortUrlHelp" />
+        <span asp-validation-for="ShortUrl" class="text-danger"></span>
+        <small id="ShortUrlHelp" class="form-text text-muted">Choose a short unique key for this URL.</small>
+    </div>
 
-    <input type="submit" value="Create" />
-
+    <button type="submit" class="btn btn-primary">Create</button>
 </form>

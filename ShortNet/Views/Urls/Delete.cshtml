@@ -1,0 +1,23 @@
+@model ShortNet.Models.Url
+
+@{
+    ViewData["Title"] = "Delete URL";
+}
+
+<h1>Delete URL</h1>
+<p>You are about to delete the following URL from your collection. This action cannot be undone.</p>
+
+<div class="card mb-3">
+    <div class="card-body">
+        <h2 class="card-title">@Model.Name</h2>
+        <p><strong>Original URL:</strong> @Model.LongUrl</p>
+        <p><strong>Short URL:</strong> @Model.ShortUrl</p>
+    </div>
+</div>
+
+<form asp-action="Delete" method="post">
+    @Html.AntiForgeryToken()
+    <input type="hidden" asp-for="Id" />
+    <button type="submit" class="btn btn-danger">Delete</button>
+    <a asp-action="List" class="btn btn-secondary ms-2">Cancel</a>
+</form>

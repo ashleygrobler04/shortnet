@@ -1,43 +1,50 @@
 using System;
-using ShortNet.Models;
 using ShortNet.Interfaces;
+using ShortNet.Models;
 
 namespace ShortNet.Services;
 
 public class UrlService : IUrlService
 {
-    public Url CreateUrl(string? Url, string? Name, string? ShortUrl)
+    public Url CreateUrl(string url, string? name, string shortUrl)
     {
-        if (string.IsNullOrEmpty(Url))
+        if (string.IsNullOrWhiteSpace(url))
         {
-            throw new ArgumentException("Url field can not be empty");
-        }
-        if (string.IsNullOrEmpty(ShortUrl))
-        {
-            throw new ArgumentException("Short url field can not be empty");
+            throw new ArgumentException("Url field cannot be empty.", nameof(url));
         }
 
-        return new Url()
+        if (string.IsNullOrWhiteSpace(shortUrl))
         {
-            LongUrl = Url,
-            Name = Name ?? $"URL-{DateTime.Now.ToString()}",
-            ShortUrl = ShortUrl
+            throw new ArgumentException("Short url field cannot be empty.", nameof(shortUrl));
+        }
+
+        if (!IsValid(url))
+        {
+            throw new ArgumentException("Url must be a valid absolute HTTP or HTTPS URL.", nameof(url));
+        }
+
+        return new Url
+        {
+            LongUrl = url.Trim(),
+            Name = string.IsNullOrWhiteSpace(name)
+                ? $"URL-{DateTime.UtcNow:yyyyMMddHHmmss}"
+                : name.Trim(),
+            ShortUrl = shortUrl.Trim()
         };
     }
 
-    public bool IsValid(string Url)
+    public bool IsValid(string url)
     {
-        bool success = true;
-        if (!Url.StartsWith("https://") && !Url.StartsWith("http://"))
+        if (string.IsNullOrWhiteSpace(url))
         {
-            success = false;
+            return false;
         }
 
-        //split on "." to see if it contains more than 2 parts...
-        if (Url.Split(".").Length<2)
+        if (!Uri.TryCreate(url.Trim(), UriKind.Absolute, out var uriResult))
         {
-            success=false;
+            return false;
         }
-        return success;
+
+        return uriResult.Scheme == Uri.UriSchemeHttp || uriResult.Scheme == Uri.UriSchemeHttps;
     }
 }

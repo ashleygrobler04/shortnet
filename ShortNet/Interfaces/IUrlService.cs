@@ -1,4 +1,3 @@
-using System;
 using ShortNet.Models;
 
 namespace ShortNet.Interfaces;
@@ -6,18 +5,18 @@ namespace ShortNet.Interfaces;
 public interface IUrlService
 {
     /// <summary>
-    /// Check if the given URl is valid.
+    /// Check whether the given URL is a valid absolute HTTP or HTTPS URI.
     /// </summary>
-    /// <param name="Url">The give url to check</param>
-    /// <returns>True if the given url is valid, false otherwise</returns>
-    bool IsValid(string Url);
+    /// <param name="url">The URL to validate.</param>
+    /// <returns>True if the URL is valid; otherwise false.</returns>
+    bool IsValid(string url);
 
     /// <summary>
-    /// Create and save a url with the give data
+    /// Create a validated Url model from the provided user input.
     /// </summary>
-    /// <param name="Url">The url to shorten</param>
-    /// <param name="Name">The name of the url</param>
-    /// <param name="ShortUrl">The shortened version of the url</param>
-    /// <returns>A URL model that can be saed to the db if successfull</returns>
-    Url CreateUrl(string? Url, string? Name, string? ShortUrl);
+    /// <param name="url">The long URL to shorten.</param>
+    /// <param name="name">The optional display name for the URL.</param>
+    /// <param name="shortUrl">The shortened URL key.</param>
+    /// <returns>A validated Url model ready to persist.</returns>
+    Url CreateUrl(string url, string? name, string shortUrl);
 }

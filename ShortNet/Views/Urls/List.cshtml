@@ -1,8 +1,17 @@
-﻿@{
+﻿@using ShortNet.Models
+@{
     ViewData["Title"] = "Your urls";
     var urls = ViewData["UserUrls"] as List<Url>;
 }
 <h1>Your created urls</h1>
+@if (TempData["ErrorMessage"] is string errorMessage)
+{
+    <div class="alert alert-danger" role="alert" aria-live="assertive">@errorMessage</div>
+}
+@if (TempData["SuccessMessage"] is string successMessage)
+{
+    <div class="alert alert-success" role="alert" aria-live="assertive">@successMessage</div>
+}
 @if (urls == null || urls.Count == 0)
 {
     <p>You did not create any urls as of yet.</p>
@@ -11,15 +20,16 @@ else
 {
     @foreach (var userUrl in urls)
     {
-        <h3>@userUrl.Name</h3>
-        <ul>
-            <li>
-                Long url: @userUrl.LongUrl
-            </li>
-            <li>
-                Shortened to: @userUrl.ShortUrl
-            </li>
-        </ul>
-        <a href="/Urls/Edit/@userUrl.Id">Edit</a>
+        <article class="mb-4">
+            <h3>@userUrl.Name</h3>
+            <ul>
+                <li>Long url: @userUrl.LongUrl</li>
+                <li>Shortened to: @userUrl.ShortUrl</li>
+            </ul>
+            <a asp-action="Edit" asp-route-id="@userUrl.Id">Edit</a>
+            <a asp-action="DeleteConfirm" asp-route-id="@userUrl.Id" class="btn btn-link text-danger ms-3" role="button">
+                Delete
+            </a>
+        </article>
     }
 }
