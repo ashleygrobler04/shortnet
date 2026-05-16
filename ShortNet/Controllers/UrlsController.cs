@@ -35,7 +35,7 @@ public class UrlsController : Controller
             _context.Urls.Add(url);
             _context.SaveChanges();
         }
-        return View("Url created!");
+        return View("Index");
     }
 
     public ActionResult List()
@@ -43,17 +43,6 @@ public class UrlsController : Controller
         var userUrls = _context.Urls.Where(u => u.CreatedBy == User.Identity.Name).ToList();
         ViewData["UserUrls"] = userUrls;
         return View();
-    }
-
-    [HttpGet("Urls/To/{shortenedUrl}")]
-    public ActionResult To(string shortenedUrl)
-    {
-        var foundUrl = _context.Urls.Where(u => u.ShortUrl == shortenedUrl).FirstOrDefault();
-        if (foundUrl == null)
-        {
-            return View("NotFound");
-        }
-        return Redirect(foundUrl.LongUrl);
     }
 
     [Authorize]
